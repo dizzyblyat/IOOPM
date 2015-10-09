@@ -186,8 +186,16 @@ int entry_compare(Goods *newGoods){
   return 0;
 }
 
+void undoGoods_copy(Goods *cursor, Action_t undoGoods){
+  if(undoGoods != NULL){
+    undoGoods->copy = NULL;
+    undoGoods->copy = malloc(sizeof(struct goods));
+    memcpy(undoGoods->copy, cursor, sizeof(struct goods));
+  }
+}
+
 // Updates the amount on an entry
-void entry_update_amount(Goods *newGoods){
+void entry_update_amount(Goods *newGoods, Action_t undoGoods){
   // Comparison bits for different compare patterns
   int compareName;
   int compareShelf;
@@ -196,6 +204,8 @@ void entry_update_amount(Goods *newGoods){
   int i = 0;
 
   cursor = list;
+
+  undoGoods->type = 3;
 
   while(i != 1){
     compareName = strcmp(newGoods->name, cursor->name);
@@ -212,11 +222,13 @@ void entry_update_amount(Goods *newGoods){
       compareLocation = 1;
     }
     if(compareName == 0 && compareShelf == 0 && compareLocation == 0){
+      undoGoods_copy(cursor, undoGoods);
       cursor->amount = cursor->amount + newGoods->amount;
       i = 1;
     }
     cursor = cursor->next;
   }
+  undoGoods->merch = newGoods;
 }
 
 // Removes item from list
@@ -460,14 +472,12 @@ void new_entry(Action_t undoGoods){
   enter_amount(buffer);
   newGoods->amount = atoi(buffer);
 
-  undoGoods->type = 1;
-  undoGoods->merch = newGoods;
   // User interface
-  new_entryUI(newGoods);
+  new_entryUI(newGoods, undoGoods);
 }
 
  // User interface for saving/discarding/editing entry
-void new_entryUI(Goods *newGoods){
+void new_entryUI(Goods *newGoods, Action_t undoGoods){
   int choice = -1;
   Goods *cursor;
 
@@ -503,7 +513,8 @@ void new_entryUI(Goods *newGoods){
 	break;
       }
       if(entry_compare(newGoods) == 2){
-	entry_update_amount(newGoods);
+	entry_update_amount(newGoods, undoGoods);
+
 	puts("==============");
 	puts("Saving item...");
 	puts("==============");
@@ -517,11 +528,13 @@ void new_entryUI(Goods *newGoods){
 	puts("==============");
 	newGoods->next = list;
 	list = newGoods;
+
+	undoGoods->type = 1;
+	undoGoods->merch = newGoods;
 	// Exit while loop
 	choice = 0;
 	break;
       }
-      free(newGoods);
 
       // Edit entry
       int i = 0;
@@ -537,7 +550,6 @@ void new_entryUI(Goods *newGoods){
       }
       newGoods->next = list;
       list = newGoods;
-      free(newGoods);
       choice = 0;
       break;
 
@@ -738,13 +750,7 @@ void edit_entryUI(Goods *cursor, Action_t undoGoods){
   Goods *prev = NULL;
   Goods *newGoods = malloc(sizeof(struct goods));
 
-  if(undoGoods != NULL){
-    undoGoods->copy = NULL;
-    undoGoods->copy = malloc(sizeof(struct goods));
-    memcpy(undoGoods->copy, cursor, sizeof(struct goods));
-    undoGoods->copy->name = strdup(cursor->name);
-    undoGoods->copy->description = strdup(cursor->description);
-  }
+  undoGoods_copy(cursor, undoGoods);
 
   while(editChoice != 0){
     puts("___________________________");
@@ -807,7 +813,7 @@ void edit_entryUI(Goods *cursor, Action_t undoGoods){
       newGoods->amount = cursor->amount;
 
       if(entry_compare(newGoods) == 2){
-	entry_update_amount(newGoods);
+	entry_update_amount(newGoods, undoGoods);
 	delete_entry(cursor, prev);
       }
       while(entry_compare(newGoods) == 1){
@@ -840,7 +846,7 @@ void edit_entryUI(Goods *cursor, Action_t undoGoods){
       newGoods->amount = cursor->amount;
 
       if(entry_compare(newGoods) == 2){
-	entry_update_amount(newGoods);
+	entry_update_amount(newGoods, undoGoods);
 	delete_entry(cursor, prev);
       }
 

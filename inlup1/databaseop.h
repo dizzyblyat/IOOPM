@@ -44,7 +44,8 @@ void enter_shelf(char *buffer);
 void enter_location(char *buffer);
 void enter_amount(char *buffer);
 int entry_compare(Goods *newGoods);
-void entry_update_amount(Goods *newGoods);
+void undoGoods_copy(Goods *cursor, Goods undoGoods);
+void entry_update_amount(Goods *newGoods, Action_t undoGoods);
 void delete_entry(Goods *cursor, Goods *prev);
 // External DB functions
 void openUserDB(char *argv[]);
@@ -55,7 +56,7 @@ void readDB();
 void saveToFile();
 // Internal DB functions
 void new_entry(Action_t undoGoods);
-void new_entryUI(Goods *newGoods);
+void new_entryUI(Goods *newGoods, Action_t undoGoods);
 void list_entry(int menuChoice, Action_t undoGoods);
 void entry_selectUI(int menuChoice, char *choice, int pageCount, Action_t undoGoods);
 void delete_entryUI(Goods *cursor, Goods *prev, Action_t undoGoods);

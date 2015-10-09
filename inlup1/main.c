@@ -35,7 +35,6 @@ int main(int argc, char *argv[]){
     }
   }
 
-  // Main loop
   int choice = -1;
   // User interface
   while(choice != 0){
