@@ -44,7 +44,7 @@ void enter_shelf(char *buffer);
 void enter_location(char *buffer);
 void enter_amount(char *buffer);
 int entry_compare(Goods *newGoods);
-void undoGoods_copy(Goods *cursor, Goods undoGoods);
+void undoGoods_copy(Goods *cursor, Action_t undoGoods);
 void entry_update_amount(Goods *newGoods, Action_t undoGoods);
 void delete_entry(Goods *cursor, Goods *prev);
 // External DB functions

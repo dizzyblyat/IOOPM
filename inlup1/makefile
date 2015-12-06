@@ -1,6 +1,6 @@
 # Makefile for Inventory Manager
 
-#.SILENT:
+.SILENT:
 goods: main.o databaseop.o
 	gcc -g -D_GNU_SOURCE -std=c11 main.c databaseop.c databaseop.h -o goods
 	echo Done!
@@ -11,7 +11,6 @@ databaseop.o: databaseop.c databaseop.h
 	gcc -g -c -D_GNU_SOURCE -std=c11 -Wall databaseop.c
 	echo databaseop.c compilation complete.
 
-.PHONY: clean
 clean:
 	rm *.o
 	rm goods
