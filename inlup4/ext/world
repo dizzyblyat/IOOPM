@@ -1,0 +1,12 @@
+Room 1314; Room 1316; Hallway 1; X; X; False; True; X; X;
+Hallway 1; Hallway 2; Room 1315; X; Room 1314; True; True; X; True;
+Room 1315; X; X; X; Hallway 1; X; X; X; True;
+Room 1316; X; Hallway 2; Room 1314; X; X; False; False; X;
+Hallway 2; Hallway 3; Room 1317; Hallway 1; Room 1316; True; False; True; False;
+Room 1317; X; X; X; Hallway 2; X; X; X; False;
+Room 1318; X; Hallway 3; X; X; X; True; X; X;
+Hallway 3; Hallway 4; Room 1319; Hallway 2; Room 1318; True; True; True; True;
+Room 1319; Room 1321; X; X; Hallway 3; True; X; X; True;
+Room 1320; X; Hallway 4; X; X; X; False; X; X;
+Hallway 4; X; Room 1321; Hallway 3; Room 1320; X; True; True; False;
+Room 1321; X; X; Room 1319; Hallway 4; X; X; True; True;
